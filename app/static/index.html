@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatalogIQ Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>CatalogIQ</h1>
+        <div id="metrics-bar">
+            <span>LLM Calls: <strong id="metric-calls">0</strong></span>
+            <span>Errors: <strong id="metric-errors">0</strong></span>
+            <span>Max Concurrency: <strong id="metric-concurrency">0</strong></span>
+        </div>
+    </header>
+
+    <main>
+        <!-- 1. CSV Upload Section -->
+        <section class="card">
+            <h2>Upload Listings</h2>
+            <div class="upload-box">
+                <input type="file" id="csv-file" accept=".csv" />
+                <button id="upload-btn">Start Job</button>
+            </div>
+            
+            <div id="job-progress-container" class="hidden">
+                <h3>Job Progress (<span id="job-id"></span>)</h3>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill"></div>
+                </div>
+                <div class="job-stats">
+                    <span>Done: <strong id="job-done">0</strong></span>
+                    <span>Failed: <strong id="job-failed">0</strong></span>
+                    <span>Cache Hits: <strong id="job-cache">0</strong></span>
+                    <span>Total: <strong id="job-total">0</strong></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Catalogue Browser -->
+        <section class="card">
+            <h2>Catalogue</h2>
+            <div class="filter-controls">
+                <input type="text" id="search-input" placeholder="Search titles..." />
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Personal Care">Personal Care</option>
+                    <option value="Household">Household</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home & Kitchen">Home & Kitchen</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <table id="products-table">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Clean Title</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="products-list"></tbody>
+            </table>
+
+            <div class="pagination">
+                <button id="prev-page" disabled>Previous</button>
+                <span id="page-info">Page 1</span>
+                <button id="next-page" disabled>Next</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 3. Review / Edit Modal -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Review & Edit Product</h3>
+            <div class="side-by-side">
+                <div>
+                    <h4>Raw Data</h4>
+                    <p><strong>SKU:</strong> <span id="modal-sku"></span></p>
+                    <p><strong>Raw Title:</strong> <span id="modal-raw-title"></span></p>
+                    <p><strong>Raw Description:</strong> <span id="modal-raw-desc"></span></p>
+                    <p id="modal-error-box" class="error-msg hidden"></p>
+                </div>
+                <div>
+                    <h4>Enriched Data</h4>
+                    <label>Clean Title</label>
+                    <input type="text" id="modal-clean-title" />
+                    
+                    <label>Category</label>
+                    <select id="modal-category">
+                        <option value="Groceries">Groceries</option>
+                        <option value="Beverages">Beverages</option>
+                        <option value="Personal Care">Personal Care</option>
+                        <option value="Household">Household</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Home & Kitchen">Home & Kitchen</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <label>Tags (comma separated)</label>
+                    <input type="text" id="modal-tags" />
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="save-approve-btn">Approve</button>
+                <button id="close-modal-btn" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
